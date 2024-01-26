@@ -1,0 +1,48 @@
+{% extends 'tasks/base.html' %}
+  
+{% block title %}
+ Add comment
+{% endblock %}
+  
+{% block content %}
+
+<style>
+    .form-container{
+        background-color: rgb(226, 248, 255);
+    }
+    .container-c1{
+        border-radius: 2rem;
+        background-color: #8EC5FC;
+        background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);
+    }
+</style>
+    
+    {% if user.is_authenticated %}
+       <center><h1>Welcome {{user.first_name}}!! </h1></center> 
+    {% endif %}
+    <div class="container-c1 p-5 my-5 border">
+        <center><h3>Add a comment here</h3></center> 
+        <form action=""method="post" id="postForm">
+            {%csrf_token%}
+            <!-- <div class="container-c1 p-5 my-5 border form-container" id="form-container"> -->
+                {{form.media}}
+                {{form.as_p}}
+            <center><strong>Note that there will be no editing after pressing the NEXT button!!</strong></center>
+            <br>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <br>
+                <p><button class="btn btn-success" type="submit" value="submit">Save</button></p>
+                <p><button class="btn btn-secondary" id="backButton">Back</button></p>
+                <!-- <p><button class="btn btn-primary" type="submit" name="submit_action" value="back">Cancel</button></p> -->
+            </div>
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Add JavaScript code to handle the back button click event
+        document.getElementById('backButton').addEventListener('click', function() {
+          // Use the history object to navigate back
+          window.history.back();
+        });
+        </script>
+{% endblock %} 

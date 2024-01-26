@@ -1,0 +1,35 @@
+{% extends 'tasks/base.html' %}
+  
+{% block title %}
+    Update Tasks
+{% endblock %}
+  
+{% block content %}
+
+{% if user.is_authenticated %}
+        <div class="form-group p-5 my-5 border">
+            <h1><u>Update your task here.</u></h1>
+            <small><a href="{% url 'task_delete' task.pk%}" class="">(Delete task)</a></small>
+            <br>
+            <br>
+            <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{form.media}}
+                {{form.as_p}}
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button class="btn btn-primary" type="submit" >Update</button>
+                    <button class="btn btn-secondary" id="backButton">Back</button>
+                </div>
+            </form>
+        </div>
+    {% else %}
+        <p>You are not authorized to be in this page!!</p>
+    {% endif %}
+    <script>
+        // Add JavaScript code to handle the back button click event
+        document.getElementById('backButton').addEventListener('click', function() {
+          // Use the history object to navigate back
+          window.history.back();
+        });
+        </script>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'tasks/base.html' %}
+  
+{% block title %}
+    Update profile
+{% endblock %}
+  
+{% block content %}
+
+{% if user.is_authenticated %}
+        <!-- <div class="form-group p-5 my-5 border">
+            <h1><u>Update your Q.log here.</u></h1>
+            <small><a href="{% url 'profile_delete' post.pk%}" class="">(Delete Q.log)</a></small>
+            <br>
+            <br>
+            <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{form.media}}
+                {{form.as_p}}
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button class="btn btn-primary" type="submit" >Update</button>
+                    <a href="{% url 'profile_view' %}" class="btn btn-secondary ">Back</a>
+                </div>
+            </form>
+        </div> -->
+        <h2>Edit Your Profile</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Save Changes">
+            <button class="btn btn-secondary" id="backButton">Back</button>
+        </form>
+        {% if img_obj %}  
+        <h3>Succesfully uploaded : {{img_obj.caption}}</h3>  
+        <img src="{{ profile_image.image.url}}" alt="connect" style="max-height:300px">  
+        {% endif %}  
+
+    {% else %}
+        <p>You are not authorized to be in this page!!</p>
+    {% endif %}
+    <script>
+        // Add JavaScript code to handle the back button click event
+        document.getElementById('backButton').addEventListener('click', function() {
+          // Use the history object to navigate back
+          window.history.back();
+        });
+        </script>
+{% endblock %}

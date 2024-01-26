@@ -1,0 +1,37 @@
+{% extends 'tasks/base.html' %}
+  
+{% block title %}Home{% endblock %}
+  
+{% block content %}
+<style>
+  .form-group{
+      background-image: linear-gradient(to right,rgb(15, 20, 54) 0%,#0869b3 70%, #6da7c8 100%);
+      color: white;
+      border-radius: 25px;
+  }
+  h3{
+      text-align: center;
+      font-family: Arial;
+      font-size: 2rem;
+  }
+</style>
+<br>
+<div class="container">
+  <section class="section">
+      <center><h1>Welcome to Brussley Tech !!</h1></center>
+  <br>
+  <h3>Latest News for the Crew!!</h3>
+  <div class="form-group p-5 my-5 border">
+      <ul>
+          {%for news in announcement%}
+              <li>
+                  <h4>{{news.title}} </h4><small>{{news.date_added}} </small>
+                  <p>{{news.content}} </p>
+              </li>
+              <hr>
+          {%endfor%}
+      </ul>
+  </div>
+  </section>
+</div>
+{% endblock %}

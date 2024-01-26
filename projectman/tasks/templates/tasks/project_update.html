@@ -1,0 +1,47 @@
+{% extends 'tasks/base.html' %}
+  
+{% block title %}
+    Update project
+{% endblock %}
+  
+{% block content %}
+
+<style>
+    .form-container{
+        background-color: rgb(226, 248, 255);
+    }
+    .container-c1{
+        border-radius: 2rem;
+        background-color: #8EC5FC;
+        background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);
+    }
+</style>
+
+{% if user.is_authenticated %}
+        <div class="container-c1 p-5 my-5 border">
+            <h1><u>Update your project here.</u></h1>
+            
+            <small><a href="{% url 'project_delete' project.pk%}" class="">(Delete project)</a></small>
+            <br>
+            <br>
+            <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{form.media}}
+                {{form.as_p}}
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button class="btn btn-primary" type="submit" >Update</button>
+                    <button class="btn btn-secondary" id="backButton">Back</button>
+                </div>
+            </form>
+        </div>
+    {% else %}
+        <p>You are not authorized to be in this page!!</p>
+    {% endif %}
+    <script>
+        // Add JavaScript code to handle the back button click event
+        document.getElementById('backButton').addEventListener('click', function() {
+          // Use the history object to navigate back
+          window.history.back();
+        });
+        </script>
+{% endblock %}

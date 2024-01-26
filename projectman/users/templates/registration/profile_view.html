@@ -1,0 +1,28 @@
+{% extends 'tasks/base.html' %} 
+{% block title %}
+    User Profile
+{% endblock %}
+{% block content %}
+{% if user.is_authenticated %}
+{% if user.id == profile.id %}
+    <h2>Your Profile</h2>
+  <!-- Display user profile information here -->
+  <img src="{{ profile.profile_image.url }}" alt="Profile Image">
+  <!-- Display other user profile fields -->
+    <br>
+    <br>
+    <p> {{}} </p>
+            <small><a href="{% url 'profile_update' profile.pk%}" class="">(Update profile)</a></small>
+        {% endif %}
+    {% endif %}
+    <div class="d-flex justify-content-center">
+      <a href="{% url 'home' %}" class=" btn btn-secondary">Back</a>
+    </div>
+    <script>
+        // Add JavaScript code to handle the back button click event
+        document.getElementById('backButton').addEventListener('click', function() {
+          // Use the history object to navigate back
+          window.history.back();
+        });
+        </script>
+{% endblock %}

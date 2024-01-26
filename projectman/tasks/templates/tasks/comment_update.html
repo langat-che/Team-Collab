@@ -1,0 +1,16 @@
+{% extends 'tasks/base.html' %}
+  
+{% block title %}
+
+{% endblock %}
+  
+{% block content %}
+<button class="btn btn-secondary" id="backButton">Back</button>
+<script>
+    // Add JavaScript code to handle the back button click event
+    document.getElementById('backButton').addEventListener('click', function() {
+      // Use the history object to navigate back
+      window.history.back();
+    });
+    </script>
+{% endblock %}
