@@ -13,41 +13,37 @@ class UserRegisterForm(UserCreationForm):
         model = User
         fields = ['username', 'email', 'password1', 'password2']
 
-# Create a UserUpdateForm to update a username and email
-class UserUpdateForm(forms.ModelForm):
-    email = forms.EmailField()
-
-    class Meta:
-        model = User
-        fields = ['username', 'email']
 
 # Create a ProfileUpdateForm to update image.
-class ProfileUpdateForm(UserCreationForm):
+class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['user', 'image', 'bio']       
+        fields = ['role', 'team', 'bio', 'image']
         
         widgets = {
-            'user' : forms.TextInput(attrs={'class':'form-control'}),
-            'image' : forms.ImageField(),
-            'bio': forms.TextInput(attrs={'class':'form-control'}),
+            'role' : forms.TextInput(attrs={'class':'form-control'}),
+            'team' : forms.Select(attrs={"class":"form-select"}),
+            'bio': forms.TextInput(attrs={"class":"form-control"}),
         }
         
-        # def __init__(self, user=None, *args, **kwargs):
-        #     super(ProfileUpdateForm, self).__init__(*args, **kwargs)
-        #     self.user = user
-
-        #     # If a user is provided, limit queryset for user field
-        #     if user:
-        #         self.fields['user'].queryset = User.objects.filter(pk=user.pk)
-
-        def save(self, commit=True):
-            instance = super(ProfileUpdateForm, self).save(commit=False)
-
-            if self.user:
-                instance.user = self.user
-
-            if commit:
-                instance.save()
-
-            return instance
+        def __init__(self, *args, **kwargs):
+            super(ProfileUpdateForm, self).__init__(*args, **kwargs)
+            self.fields['image'].widget.attrs.update({'class': 'form-control'})
+            
+     
+     
+     
+class UpdateUserForm(forms.ModelForm):
+    
+    class Meta:
+        model = User
+        fields = ["username",'first_name','last_name','email']
+        
+        widgets = {
+            
+            'username' : forms.TextInput(attrs={'class':'form-control'}),
+            'first_name' : forms.TextInput(attrs={'class':'form-control'}),
+            'last_name' : forms.TextInput(attrs={'class':'form-control'}),
+            'email' : forms.EmailInput(attrs={'class':'form-control'}),    
+        }
+        

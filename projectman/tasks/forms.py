@@ -1,12 +1,12 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Project, Task, Comment, Travel
+from .models import Project, Task, Comment
 
 
 class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
-        fields = ['project_name', 'description', 'start_date', 'end_date']
+        fields = ['project_name', 'description', 'start_date', 'end_date','project_file', 'project_repo']
         
         widgets = {
             'project_name' : forms.TextInput(attrs={'class':'form-control'}),
@@ -35,18 +35,6 @@ class CommentForm(forms.ModelForm):
         
         widgets = {
             'comment_text' : forms.Textarea(attrs={'class': 'form-control'}),
-        }
-
-        
-class TravelForm(forms.ModelForm):
-    class Meta:
-        model= Travel
-        fields = ['from_date','to_date','travel_location']
-
-        widgets = {
-            'travel_location' : forms.TextInput(attrs={'class': 'form-control'}),
-            'from_date' : forms.DateInput(attrs={'type':'date'}),
-            'to_date' : forms.DateInput(attrs={'type':'date'}),
         }
 
  

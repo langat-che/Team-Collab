@@ -10,7 +10,7 @@
 <br>
     <h2>{{ project.project_name }}</h2>
     {% if user.is_authenticated %}
-        {% if user.id == project.author.id %}
+        {% if user.is_superuser %}
             <small><a href="{% url 'project_update' project.id %}" class="">(Update Project)</a></small>
         {% endif %}
     {% endif %}
@@ -20,6 +20,13 @@
     <br>
     <p>{{ project.description|safe }}</p>
     <!-- Display other project details -->
+        <p>{{project.project_file}} </p>
+        <br>
+        {% if project.project_repo %}
+            <a href="{{ project.project_repo }}" target="_blank">A link to {{ project.project_name }} project repository</a>
+        {% else %}
+            <p>No project repository available.</p>
+        {% endif %}
         <br>
         <br>
         {%if user.is_superuser%}

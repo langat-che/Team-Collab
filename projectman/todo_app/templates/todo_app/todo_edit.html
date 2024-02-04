@@ -1,0 +1,16 @@
+{% extends 'tasks/base.html' %}
+  
+{% block title %}
+to-do edit
+{% endblock %}
+  
+{% block content %}
+<br>
+  <br>
+  <h2>Edit your to-do task here!</h2>
+  <form action="" method="POST">
+    {%csrf_token%}
+        {{form.as_p}}
+        <button type="submit" class="btn btn-success">Submit</button>
+  </form>
+{% endblock %}

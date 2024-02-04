@@ -20,7 +20,10 @@
     {% endif %}
     <div class="container-c1 p-5 my-5 border">
         <center><h3>Add a Project here</h3></center> 
-        <form action=""method="post" id="postForm">
+            {% for msg in messages %}
+                {{msg}}
+            {% endfor %}
+        <form action=""method="post" id="postForm" action="{% url 'project_add' %}" onsubmit="return confirmSubmit()">
             {%csrf_token%}
                 {{form.media}}
                 {{form.as_p}}
@@ -40,6 +43,9 @@
       // Use the history object to navigate back
       window.history.back();
     });
+    function confirmSubmit() {
+        return confirm("Are you sure you want to submit the form?");
+    }
     </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 {% endblock content %}

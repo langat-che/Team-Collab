@@ -4,7 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from .views import ProfileDelete, ProjectDelete, TaskDelete
 from .views import ProjectUpdate, TaskUpdate
-from .views import project_list, project_detail, task_detail, create_project, create_comment,create_task
+from .views import project_list, project_detail, task_detail, create_project, create_comment,create_task, assigned_tasks
 
 
 urlpatterns = [
@@ -15,7 +15,7 @@ urlpatterns = [
     ##
     path('projects/<int:project_id>/create_task/', create_task, name='task_add'),
     path('create_project/', create_project, name='project_add'),
-    path('tasks/<int:task_id>/', task_detail, name='task_detail'),
+   
     path('tasks/<int:task_id>/create_comment/', create_comment, name='comment_add'),
     
     #deleteviews
@@ -36,8 +36,13 @@ urlpatterns = [
     #listviews
     ##
     path('projects/', project_list, name='project_list'),
-    path('projects/<int:project_id>/', project_detail, name='project_detail'),
     
+    
+    ##detailviews
+    path('assigned_tasks/', assigned_tasks, name='assigned_tasks'),
+    path('tasks/<int:task_id>/', task_detail, name='task_detail'),
+    path('projects/<int:project_id>/', project_detail, name='project_detail'),
+     
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,6 +1,7 @@
 {% extends 'tasks/base.html' %} 
-  
-{% block title %}Login{% endblock %}
+{% block title %}
+  Profile 
+{% endblock %}
   
 {% block content %}
 <br>
@@ -17,24 +18,20 @@
             style="height:150px;width:150px;"
           /></center>
           <div class="media-body">
-            <h2 class="account-heading">{{ user.username }}</h2>
-            <p class="text-secondary">{{ user.email }}</p>
+            <a href="{% url 'change_password' %}" class="btn btn-primary">Change your Password</a>
           </div>
         </div>
-        <!-- FORM HERE -->
-        <form method="POST" enctype="multipart/form-data">
-          {% csrf_token %}
           <fieldset class="form-group">
             <legend class="border-bottom mb-4">Profile Info</legend>
-            <!-- {{ u_form}} -->
-            <!-- User form -->
-            <!-- {{ p_form }} -->
-            <!-- Profile form -->
+            <h2 class="account-heading">{{ user.first_name }} {{user.last_name}} </h2>
+            <p class="text-secondary">Email: {{ user.email }}</p>
+            <h3>From team: {{user.profile.team}} </h3>
+            <h4>Role: {{user.profile.role}} </h4>
+            <p>Bio: {{user.profile.bio}} </p>
           </fieldset>
           <div class="form-group">
-            <button class="btn btn-outline-info" type="submit">Update</button>
+            <a href="{% url 'profile_edit' %}" class="btn btn-outline-info" >Update Profile</a>
           </div>
-        </form>
       </div>
       <script>
         // Add JavaScript code to handle the back button click event
@@ -42,5 +39,6 @@
           // Use the history object to navigate back
           window.history.back();
         });
+        
         </script>
 {% endblock %}

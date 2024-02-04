@@ -35,7 +35,12 @@
                 <form action="" method="POST">
                     {% csrf_token %}
                     <div class="form" >
-                        {{form.as_p}}
+                        {{ form.username.label_tag }} <br> {{ form.username }}
+                        <br>
+                        {{ form.password.label_tag }} <br> {{ form.password }}
+                        <br>
+                        <input type="checkbox" onclick="togglePassword()"> Show Password
+                        <br>
                     </div>
                 <br>
                 <br>
@@ -49,4 +54,16 @@
                 </div>    
         </div>
     </div>
+    <script type="text/javascript">
+        function togglePassword() {
+            var passwordField = document.getElementById('id_password');
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+            } else {
+                passwordField.type = 'password';
+            }
+        }
+        </script> 
+
 {% endblock content %}
+

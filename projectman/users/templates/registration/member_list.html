@@ -1,0 +1,16 @@
+{% extends 'tasks/base.html' %}
+  
+{% block title %}
+Members
+{% endblock %}
+  
+{% block content %}
+<br>
+<br>
+<h2>Users in {{ team.name }}</h2>
+<ul>
+  {% for user in team_users %}
+    <li>{{ user.user.username }}</li>
+  {% endfor %}
+</ul>
+{% endblock %}

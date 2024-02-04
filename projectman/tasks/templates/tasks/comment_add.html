@@ -20,6 +20,10 @@
     {% if user.is_authenticated %}
        <center><h1>Welcome {{user.first_name}}!! </h1></center> 
     {% endif %}
+
+    {% for msg in messages %}
+                {{msg}}
+            {% endfor %} 
     <div class="container-c1 p-5 my-5 border">
         <center><h3>Add a comment here</h3></center> 
         <form action=""method="post" id="postForm">

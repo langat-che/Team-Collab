@@ -46,16 +46,22 @@ INSTALLED_APPS = [
     'users',
     'tasks',
     'ckeditor',
+    'todo_app',
 ]
 
 ASGI_APPLICATION = "projectman.asgi.application"
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels_redis.core.RedisChannelLayer",
+#         "CONFIG": {
+#             "hosts": [("127.0.0.1", 6379)],
+#         },
+#     },
+# }
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
-        },
-    },
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
 }
 
 MIDDLEWARE = [
@@ -102,9 +108,12 @@ DATABASES = {
         # 'ENGINE': 'django.db.backends.mysql',
         # 'NAME': 'projectman',
         # 'USER': 'root',
-        # 'PASSWORD': '',
+        # 'PASSWORD': 'root',
         # 'HOST':'localhost',
         # 'PORT':'3306',
+        # 'OPTIONS': {  
+        #     'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"  
+        # }  
         
     }
 }

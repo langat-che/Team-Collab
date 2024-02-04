@@ -1,7 +1,8 @@
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from .mixins import WeekMixin
 from .forms import CommentForm, ProjectForm , TaskForm
-from .models import Announcement,Project, Task, Travel, User, Comment
+from .models import Announcement,Project, Task, User, Comment
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.shortcuts import render,redirect,get_object_or_404, HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
@@ -23,7 +24,9 @@ def base_temp(request):
 
 def home(request):
     announcement = Announcement.objects.all()[:5]
-    return render(request, 'tasks/home.html',{'announcement':announcement})
+    online_users = User.objects.filter(profile__is_online=True)
+    context = {'online_users': online_users,'announcement':announcement}
+    return render(request, 'tasks/home.html',context)
 
 def AboutView(request):
     return render(request, 'tasks/about.html')
@@ -51,7 +54,7 @@ def task_detail(request, task_id):
 @login_required
 def create_project(request):
     if request.method == 'POST':
-        form = ProjectForm(request.POST)
+        form = ProjectForm(request.POST, request.FILES)
         if form.is_valid():
             form.instance.author = request.user 
             form.save()
@@ -94,7 +97,7 @@ def create_task(request, project_id):
             return redirect('project_detail', project_id=project.id)
     else:
         form = TaskForm()
-
+        
     return render(request, 'tasks/task_add.html', {'form': form, 'project': project})
 
 
@@ -102,14 +105,10 @@ def create_task(request, project_id):
 ##
 
 def project_list(request):
-    projects = Project.objects.all()
+    projects = Project.objects.all().order_by('-end_date')
     return render(request, 'tasks/project_list.html', {'projects': projects})
 
 
-
-
-
-    
 # UpdateViews
 ##
 class ProjectUpdate(UpdateView):
@@ -154,3 +153,12 @@ class TaskDelete(DeleteView):
     model = Task
     template_name = 'tasks/task_delete.html'
     success_url = reverse_lazy('task_view')
+    
+    
+##Assigned tasks for a user
+def assigned_tasks(request):
+    user = request.user
+    user_tasks = Task.objects.filter(assigned_to=user)
+    return render(request, 'tasks/assigned_tasks.html', {'user_tasks': user_tasks})
+
+

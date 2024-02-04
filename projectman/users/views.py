@@ -1,13 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import logout
-from .models import Profile
+from .models import Profile, Team
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models.signals import post_save
-from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from .forms import UserRegisterForm, ProfileUpdateForm, UpdateUserForm
+
   
 def signup(request):
     if request.user.is_authenticated:
@@ -51,43 +53,13 @@ def profile(request):
    
 def signout(request):
     logout(request)
+    messages.add_message(request, messages.INFO, 'Successful Logout')
     return redirect('home')
 
 
 def view_profile(request):
     profile = Profile.objects.filter(user=request.user)
     return render(request, 'profile_view.html', {'profile': profile})
-
-# def image_request(request):  
-#     if request.method == 'POST':  
-#         form = ProfileForm(request.POST, request.FILES)  
-#         if form.is_valid():  
-#             form.save()  
-  
-#             # Getting the current instance object to display in the template  
-#             profile_image = form.instance  
-              
-#             return render(request, 'profile_edit.html', {'form': form, 'profile_image':profile_image})  
-#     else:  
-#         form = Profile()  
-  
-#     return render(request, 'profile_edit.html', {'form': form})  
-
-    
-# def edit_profile(request):
-#     user_profile = Profile.objects.get(user=request.user)
-
-#     if request.method == 'POST':
-#         form = ProfileForm(request.POST, request.FILES, instance=user_profile)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, 'Profile updated successfully!')
-#             return redirect('profile_view')
-#     else:
-#         form = ProfileForm(instance=user_profile)
-
-#     return render(request, 'profile_update.html', {'form': form})
-
 
 
     
@@ -105,32 +77,78 @@ def register(request):
     return render(request, 'users/register.html', {'form': form})
 
 
-# Update it here
+##Profile view
 @login_required
 def profile(request):
-    # if request.method == 'POST':
-    #     u_form = UserUpdateForm(request.POST, instance=request.user)
-    #     p_form = ProfileUpdateForm(request.POST,
-    #                                request.FILES,
-    #                                instance=request.user.profile)
-    #     if u_form.is_valid() and p_form.is_valid():
-    #         u_form.save()
-    #         p_form.save()
-    #         messages.success(request, f'Your account has been updated!')
-    #         return redirect('profile') # Redirect back to profile page
-
-    # else:
-    #     u_form = UserUpdateForm(instance=request.user)
-    #     # Check if the user has an associated profile before creating the ProfileUpdateForm
-    #     if hasattr(request.user, 'profile'):
-    #         p_form = ProfileUpdateForm(instance=request.user.profile)
-    #     else:
-    #         # If the user does not have a profile, create an empty form
-    #         p_form = ProfileUpdateForm()
-
-    # context = {
-    #     'u_form': u_form,
-    #     'p_form': p_form
-    # }
-
     return render(request, 'registration/profile.html')
+
+
+##Profile update
+# @login_required
+# def profile_update_view(request):
+#     profile = request.user.profile 
+#     if request.method == 'POST':
+#         form = ProfileUpdateForm(request.POST, request.FILES, instance=profile)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, 'Your profile was successfully updated!')
+#             return redirect('profile')  # Redirect to the user's profile detail page
+#     else:
+#         form = ProfileUpdateForm(instance=profile)
+
+#     return render(request, 'registration/profile_edit.html', {'form': form})
+
+
+@login_required
+def profile_update_view(request):
+    if request.method == 'POST':
+        user_form = UpdateUserForm(request.POST, instance=request.user)
+        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, 'Your profile has been updated!')
+            return redirect('profile')  # Update with the name of your profile view
+    else:
+        user_form = UpdateUserForm(instance=request.user)
+        profile_form = ProfileUpdateForm(instance=request.user.profile)
+
+    context = {
+        'user_form': user_form,
+        'profile_form': profile_form,
+    }
+
+    return render(request, 'registration/profile_edit.html', context)
+
+
+##change password view
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            # Update the user's session to reflect the password change
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('change_password')
+    else:
+        form = PasswordChangeForm(request.user)
+
+    return render(request, 'registration/change_password.html', {'form': form})
+
+
+
+##Team list view
+def teams(request):
+    teams = Team.objects.all()
+    return render(request, 'registration/team_list.html', {'teams': teams})
+
+
+
+##Team members listview
+def members(request, team_id):
+    team = Team.objects.get(pk=team_id)
+    team_users = Profile.objects.filter(team=team)
+    return render(request, 'registration/member_list.html', {'team': team, 'team_users': team_users})

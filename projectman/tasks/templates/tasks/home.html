@@ -16,7 +16,27 @@
   }
 </style>
 <br>
+{% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <div class="flex justify-content-end">
+                    <button type="button" class="btn btn-close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
 <div class="container">
+    <section class="current_users justify-content-start" >
+        <h2>Online Users:</h2>
+        <ul>
+            {% for user in online_users %}
+                <li>{{ profile.user.username }}</li>
+            {% endfor %}
+        </ul>
+    </section>
   <section class="section">
       <center><h1>Welcome to Brussley Tech !!</h1></center>
   <br>
@@ -34,4 +54,8 @@
   </div>
   </section>
 </div>
+<!-- Add this script after including Bootstrap CSS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-wiAlp9fE6HQ7BOsELJilicWAjXP4oxve8LSEZnA8Pr15Lq8bb2Y1/tI76NXPYlWT" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 {% endblock %}
