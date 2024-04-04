@@ -4,7 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from .views import ProfileDelete, ProjectDelete, TaskDelete
 from .views import ProjectUpdate, TaskUpdate
-from .views import project_list, project_detail, task_detail, create_project, create_comment,create_task, assigned_tasks
+from .views import project_list, project_detail, task_detail, create_project, create_comment,create_task, assigned_tasks, open_project_document, performance_metric_form
 
 
 urlpatterns = [
@@ -42,6 +42,10 @@ urlpatterns = [
     path('assigned_tasks/', assigned_tasks, name='assigned_tasks'),
     path('tasks/<int:task_id>/', task_detail, name='task_detail'),
     path('projects/<int:project_id>/', project_detail, name='project_detail'),
+    path('projects/<int:project_id>/download/', open_project_document, name='projfile_download'),
+    
+    ##Performance metrics
+    path('performance_metrics/',performance_metric_form, name="performance_metric_form"),
      
 ]
 if settings.DEBUG:

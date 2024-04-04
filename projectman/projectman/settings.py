@@ -33,7 +33,6 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'daphne',
-    'chat',
     'channels',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -41,11 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'tasks.apps.TasksConfig',
-    # 'users.apps.UsersConfig',
+    'ckeditor',
     'users',
     'tasks',
-    'ckeditor',
+    'chat',
     'todo_app',
 ]
 
@@ -63,6 +61,7 @@ CHANNEL_LAYERS = {
         "BACKEND": "channels.layers.InMemoryChannelLayer"
     }
 }
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

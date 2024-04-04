@@ -95,16 +95,17 @@
                     More
                   </a>
                     <ul class="dropdown-menu dropdown-menu-dark">
-                      <li><a class="dropdown-item" href="{% url 'chat' %}">Message</a></li>
+                      <li><a class="dropdown-item" href="{% url 'user_selection' %}">Message</a></li>
                       <li><a class="dropdown-item" href="{% url 'assigned_tasks' %}">Tasks</a></li>
                       <li><a class="dropdown-item" href="#">Completed Projects</a></li>
                       <li><a class="dropdown-item" href="{%url 'teams'%}">The Team</a></li>
+                      <li><a class="dropdown-item" href="{%url 'performance_metric_form'%}">Performance Form</a></li>
                       <li><hr class="dropdown-divider"></li>
                       <li><a class="dropdown-item" href="{%url 'about'%}">About</a></li>
                     </ul>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="{% url 'profile' %}"> Profile <img
+                    <a class="nav-link" href="{% url 'profile' %}"><img
                       class="rounded-circle article-img"
                       src="{{ user.profile.image.url }}" style="height:50px;width:50px;"/></a>
                   </li>
@@ -128,7 +129,20 @@
           </center>  
       </header>
       <div class="container">
+        {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <div class="flex justify-content-end">
+                    <button type="button" class="btn btn-close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
           {% block content %}
+          
           {% endblock content %}
       </div>  
       <br>

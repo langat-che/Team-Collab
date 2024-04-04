@@ -10,6 +10,7 @@ from .forms import TodoForm
 class TodoList(ListView):
     model = Todo
     context_object_name = "todo"
+    ordering = ("-created")
     template_name = 'todo_app/todo_list.html'
     
 
@@ -22,7 +23,8 @@ class TodoDetail(DetailView):
 ##Add todo
 class TodoAdd(CreateView):
     model = Todo
-    fields = ('__all__')
+    # fields = ('__all__')
+    form_class = TodoForm
     template_name = 'todo_app/todo_add.html'
     success_url = reverse_lazy("todolist")
     
@@ -30,7 +32,6 @@ class TodoAdd(CreateView):
 class TodoEdit(UpdateView):
     model = Todo
     form_class = TodoForm
-    context_object_name = "todo"
     template_name = 'todo_app/todo_edit.html'
     success_url = reverse_lazy('todolist')
     
@@ -38,8 +39,6 @@ class TodoEdit(UpdateView):
 ## Delete view
 class TodoDelete(DeleteView):
     model = Todo
-    form_class = TodoForm
-    context_object_name = 'todo'
     template_name = 'todo_app/todo_delete.html'
     success_url = reverse_lazy('todolist')
     

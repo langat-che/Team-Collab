@@ -16,26 +16,16 @@
   }
 </style>
 <br>
-{% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ message }}
-                <div class="flex justify-content-end">
-                    <button type="button" class="btn btn-close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            </div>
-        {% endfor %}
-    {% endif %}
 <div class="container">
     <section class="current_users justify-content-start" >
+        {%if user.is_authenticated%}
         <h2>Online Users:</h2>
         <ul>
-            {% for user in online_users %}
-                <li>{{ profile.user.username }}</li>
+            {% for user_session in active_users %}
+                <li>{{ user_session.user.username }} - {{ user_session.last_activity }}</li>
             {% endfor %}
         </ul>
+        {%endif%}
     </section>
   <section class="section">
       <center><h1>Welcome to Brussley Tech !!</h1></center>

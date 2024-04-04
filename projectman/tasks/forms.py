@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Project, Task, Comment
+from .models import Project, Task, Comment, PerformanceMetric
 
 
 class ProjectForm(forms.ModelForm):
@@ -37,4 +37,22 @@ class CommentForm(forms.ModelForm):
             'comment_text' : forms.Textarea(attrs={'class': 'form-control'}),
         }
 
- 
+class PerformanceMetricForm(forms.ModelForm):
+    
+    timeliness = forms.IntegerField(label='Timeliness', min_value=1, max_value=10, widget=forms.NumberInput(attrs={'type': 'range', 'class': 'form-range'}))
+    quality_of_work = forms.IntegerField(label='Quality of Work', min_value=1, max_value=10, widget=forms.NumberInput(attrs={'type': 'range', 'class': 'form-range'}))
+    
+    class Meta:
+        model = PerformanceMetric
+        fields = ['task', 'timeliness', 'quality_of_work', 'feedback', 'task_complexity', 'task_duration', 'task_difficulty_rating', 'task_importance', 'task_outcome', 'user_engagement']
+        
+        widgets = {
+            'task' : forms.Select(choices=Task,attrs={'class':'form-select'}),
+            'feedback': forms.Textarea(attrs={'class': 'form-control'}),
+            'task_complexity': forms.TextInput(attrs={'class': 'form-control'}),
+            'task_duration': forms.TextInput(attrs={'class': 'form-control'}),
+            'task_difficulty_rating': forms.TextInput(attrs={'class': 'form-control'}),
+            'task_importance': forms.TextInput(attrs={'class': 'form-control'}),
+            'task_outcome': forms.TextInput(attrs={'class': 'form-control'}),
+            'user_engagement': forms.TextInput(attrs={'class': 'form-control'}),
+        }

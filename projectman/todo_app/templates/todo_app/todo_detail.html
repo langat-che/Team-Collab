@@ -10,4 +10,14 @@ to-do detail
 <br>
 <br>
 <p><strong>Description:</strong> {{todo.description}}  </p>
+<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    <button class="btn btn-secondary" id="backButton">Back</button>
+</div>
+<script>
+    // Add JavaScript code to handle the back button click event
+    document.getElementById('backButton').addEventListener('click', function() {
+      // Use the history object to navigate back
+      window.history.back();
+    });
+  </script> 
 {% endblock %}

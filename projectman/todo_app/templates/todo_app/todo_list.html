@@ -7,23 +7,36 @@ to-do list
 {% block content %}
 <br>
 <br>
-
-<h1>My To-do List</h1>
 <br>
-<br>
-<a href="{% url 'todoadd' %}" class="btn btn-success">Add a todo task</a>
-<br>
-<br>
-<table>
-    <tr>
-        <th>Items</th>
-    </tr>
-    {% for todo in object_list %}
-    <tr>
-        <td><a href="{% url 'tododetail' todo.pk %}">{{todo.title}} </a></td>
-    </tr>
-    {% empty %}
+<div class="container mt-4">
+    <h2>To-Do List</h2>
+    <br>
+    <a href="{% url 'todoadd' %}" class="btn btn-success">Add a todo task</a>
+    <br>
+    <br>
+    <br>
+    <ul class="list-group">
+      {% for todo in object_list %}
+        <li class="list-group-item {% if todo.complete %}list-group-item-success{% endif %}">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h5 class="mb-1"><a href="{% url 'tododetail' todo.pk %}">{{todo.title}} </a></h5>
+              {% if todo.description %}
+                <p class="mb-1">{{ todo.description }}</p>
+              {% endif %}
+              <small>{{ todo.created|date:"F j, Y, g:i a" }}</small>
+            </div>
+            <div>
+              <!-- <input type="checkbox" {% if todo.complete %}checked{% endif %} disabled> -->
+            </div>
+          </div>
+        </li>
+        <br>
+        <br>
+        <br>
+        {% empty %}
         <h3>No Items in list!</h3>
-    {% endfor %}
-</table>
+      {% endfor %}
+    </ul>
+  </div>
 {% endblock %}

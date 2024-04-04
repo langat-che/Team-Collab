@@ -47,21 +47,17 @@ def signin(request):
     else:
         form = AuthenticationForm()
         return render(request, 'users/login.html', {'form': form})
-  
-def profile(request): 
-    return render(request, 'profile.html')
+
    
 def signout(request):
     logout(request)
-    messages.add_message(request, messages.INFO, 'Successful Logout')
+    messages.success(request, 'You are now logged out!!')
     return redirect('home')
 
 
 def view_profile(request):
     profile = Profile.objects.filter(user=request.user)
     return render(request, 'profile_view.html', {'profile': profile})
-
-
     
 
 def register(request):
@@ -84,21 +80,6 @@ def profile(request):
 
 
 ##Profile update
-# @login_required
-# def profile_update_view(request):
-#     profile = request.user.profile 
-#     if request.method == 'POST':
-#         form = ProfileUpdateForm(request.POST, request.FILES, instance=profile)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, 'Your profile was successfully updated!')
-#             return redirect('profile')  # Redirect to the user's profile detail page
-#     else:
-#         form = ProfileUpdateForm(instance=profile)
-
-#     return render(request, 'registration/profile_edit.html', {'form': form})
-
-
 @login_required
 def profile_update_view(request):
     if request.method == 'POST':
@@ -132,12 +113,11 @@ def change_password(request):
             # Update the user's session to reflect the password change
             update_session_auth_hash(request, user)
             messages.success(request, 'Your password was successfully updated!')
-            return redirect('change_password')
+            return redirect('profile')
     else:
         form = PasswordChangeForm(request.user)
 
     return render(request, 'registration/change_password.html', {'form': form})
-
 
 
 ##Team list view

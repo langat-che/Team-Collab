@@ -7,10 +7,15 @@
 {% block content %}
 <br>
 <br>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 <br>
 <h2>{{ task.task_name }} details</h2>
   <p>Description: {{ task.description|safe }}</p>
   <p>Status: {{ task.status }}</p>
+  <br>
+  <div class="progress">
+    <div class="progress-bar" role="progressbar" aria-valuenow="{{ progress_percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
   {% if user.is_authenticated %}
         {% if user.id == item.author.id %}
             <small><a href="{% url 'task_update' item.pk%}" class="">(Update Project)</a></small>
@@ -31,9 +36,15 @@
   </ul>
 
   <div class="d-flex justify-content-center">
-    <button class="btn btn-secondary" id="backButton">Back</button>
+    <a href="{% url 'project_detail' project_id=task.project.id %}"><button class="btn btn-secondary">Back</button></a>
   </div>
   <script>
+    // Get the progress bar element
+    const progressBar = document.querySelector('.progress-bar');
+    const progressPercentage = progressBar.getAttribute('aria-valuenow');
+    console.log("Progress bar: ", progressBar);
+    console.log("progress_percentage ", progressPercentage);
+    progressBar.style.width = `${progressPercentage}%`;
     // Add JavaScript code to handle the back button click event
     document.getElementById('backButton').addEventListener('click', function() {
       // Use the history object to navigate back

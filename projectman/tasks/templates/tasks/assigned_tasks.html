@@ -5,10 +5,13 @@
 {% endblock %}
   
 {% block content %}
+<br>
+<br>
 <h2>Assigned Tasks for {{ request.user.username }}</h2>
 <ul>
   {% for task in user_tasks %}
-    <li><strong>{{ task.task_name }}</strong> {{ task.description |safe }}</li>
+    <li><strong>{{ task.task_name }}</strong> - Due: {{task.due_date}}
+     {{ task.description |safe }}</li>
   {% endfor %}
 </ul>
 {% endblock %}

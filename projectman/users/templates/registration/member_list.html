@@ -13,4 +13,14 @@ Members
     <li>{{ user.user.username }}</li>
   {% endfor %}
 </ul>
+<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+  <br>
+  <p><button class="btn btn-secondary" id="backButton">Back</button></p>
+</div>
+<script>
+  document.getElementById('backButton').addEventListener('click', function() {
+    // Use the history object to navigate back
+    window.history.back();
+  });
+</script>
 {% endblock %}

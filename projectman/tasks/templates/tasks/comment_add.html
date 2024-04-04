@@ -31,15 +31,14 @@
             <!-- <div class="container-c1 p-5 my-5 border form-container" id="form-container"> -->
                 {{form.media}}
                 {{form.as_p}}
-            <center><strong>Note that there will be no editing after pressing the NEXT button!!</strong></center>
+            <center><strong>Note that there will be no editing after pressing the SAVE button!!</strong></center>
             <br>
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                 <br>
                 <p><button class="btn btn-success" type="submit" value="submit">Save</button></p>
-                <p><button class="btn btn-secondary" id="backButton">Back</button></p>
-                <!-- <p><button class="btn btn-primary" type="submit" name="submit_action" value="back">Cancel</button></p> -->
             </div>
         </form>
+        <p><a href="{% url 'task_detail' task_id=task.id %}"><button class="btn btn-secondary">Back</button></a></p>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -48,5 +47,8 @@
           // Use the history object to navigate back
           window.history.back();
         });
+        function goBack() {
+            window.history.back();
+        }
         </script>
 {% endblock %} 

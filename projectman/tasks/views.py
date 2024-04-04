@@ -1,13 +1,16 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from .mixins import WeekMixin
-from .forms import CommentForm, ProjectForm , TaskForm
-from .models import Announcement,Project, Task, User, Comment
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from .forms import CommentForm, ProjectForm , TaskForm, PerformanceMetricForm
+from .models import Announcement,Project, Task, User, Comment, PerformanceMetric
+from django.views.generic import UpdateView, DeleteView, View
 from django.shortcuts import render,redirect,get_object_or_404, HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+import mimetypes
+from django.utils import timezone
+from users.models import UserSession
 
 
 # Create your views here.
@@ -24,8 +27,10 @@ def base_temp(request):
 
 def home(request):
     announcement = Announcement.objects.all()[:5]
-    online_users = User.objects.filter(profile__is_online=True)
-    context = {'online_users': online_users,'announcement':announcement}
+    active_users = UserSession.objects.filter(
+        last_activity__gte=timezone.now() - timezone.timedelta(minutes=15)
+    )
+    context = {'active_users':active_users,'announcement':announcement}
     return render(request, 'tasks/home.html',context)
 
 def AboutView(request):
@@ -38,15 +43,24 @@ def AboutView(request):
 def project_detail(request, project_id):
     project = get_object_or_404(Project, id=project_id)
     tasks = Task.objects.filter(project=project)
-    latest_comments = Comment.objects.filter(task__project=project).order_by('-timestamp')[:5]
-    return render(request, 'tasks/project_detail.html', {'project': project, 'tasks': tasks, 'latest_comments': latest_comments})
-
-    
+    total_tasks = project.task_set.count()
+    completed_tasks = project.task_set.filter(status='done').count()
+    print("Completed :", completed_tasks, " -- Total: ", total_tasks)
+    if total_tasks != 0:
+        progress_percentage = (completed_tasks / total_tasks) * 100
+        progress = f"{progress_percentage}%"
+    else:
+        progress_percentage = 0
+        progress = f"{progress_percentage}%"
+    return render(request, 'tasks/project_detail.html', {'project': project, 'progress_percentage': progress,'tasks': tasks,})
 
 def task_detail(request, task_id):
     task = get_object_or_404(Task, id=task_id)
+    print("Task: ", task)
     comments = Comment.objects.filter(task=task).order_by('-timestamp')[:5]
-    return render(request, 'tasks/task_detail.html', {'task': task, 'comments': comments})
+    progress_percentage = 100 if task.status == 'done' else task.progress
+    return render(request, 'tasks/task_detail.html', {'task': task, 'progress_percentage': progress_percentage, 'comments': comments})
+
 
 # CreateViews
 ##
@@ -140,7 +154,7 @@ class TaskUpdate(UpdateView):
 class ProjectDelete(DeleteView):
     model = Project
     template_name = 'tasks/project_delete.html'
-    success_url = reverse_lazy('project_view')
+    success_url = reverse_lazy('project_list')
     
 
 class ProfileDelete(DeleteView):
@@ -152,7 +166,7 @@ class ProfileDelete(DeleteView):
 class TaskDelete(DeleteView):
     model = Task
     template_name = 'tasks/task_delete.html'
-    success_url = reverse_lazy('task_view')
+    success_url = reverse_lazy('project_detail')
     
     
 ##Assigned tasks for a user
@@ -161,4 +175,39 @@ def assigned_tasks(request):
     user_tasks = Task.objects.filter(assigned_to=user)
     return render(request, 'tasks/assigned_tasks.html', {'user_tasks': user_tasks})
 
+    
+def open_project_document(request, project_id):
+    document = get_object_or_404(Project, pk=project_id)
+    with open(document.project_file.path, 'rb') as file:
+        response = HttpResponse(file.read(), content_type='application/pdf')  
+        response['Content-Disposition'] = f'inline; filename="{document.project_file.name}"'
+        return response
 
+
+##recording the performance of the team member
+def record_performance(request, task_id):
+    task = get_object_or_404(Task, pk=task_id)
+    timeliness = request.POST.get('timeliness')
+    quality_of_work = request.POST.get('quality_of_work')
+    
+    # Create or update performance metric for the task and user
+    PerformanceMetric.objects.update_or_create(
+        user=request.user,
+        task=task,
+        defaults={
+            'timeliness': timeliness,
+            'quality_of_work': quality_of_work
+        }
+    )
+    
+    
+def performance_metric_form(request):
+    if request.method == 'POST':
+        form = PerformanceMetricForm(request.POST)
+        if form.is_valid():
+            form.save()
+            # Redirect to a success page or another view
+            return redirect('success_page')
+    else:
+        form = PerformanceMetricForm()
+    return render(request, 'tasks/performance_metric.html', {'form': form})    

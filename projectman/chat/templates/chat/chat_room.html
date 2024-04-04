@@ -1,0 +1,54 @@
+{% extends 'tasks/base.html' %}
+
+{% block title %}
+Chat with {{ receiver.username }}
+{% endblock %}
+
+{% block content %}
+<br>
+<br>
+<center><h1>Hello, Welcome to the chat with {{ receiver.username }}</h1></center>
+<br>
+{{sender}}
+<div class="chat__item__container" id="id_chat_item_container" style="font-size: 20px">
+  {% for message in messages_chats %}
+    {% if message.sender == sender %}
+      <div>You: {{ message.content }}</div>
+    {% else %}
+      <div>{{ message.sender }}: {{ message.content }}</div>
+    {% endif %}
+  {% endfor %}
+</div>
+
+<br>
+<form id="message-form">
+  {% csrf_token %}
+  {{ form.content }}
+  <br>
+  <br>
+  <button type="submit" class="btn btn-primary">Send</button>
+</form>
+<script>
+  const chatSocket = new WebSocket("ws://" + window.location.host + "/ws/chat/{{ user.id }}/");  // Pass the user ID dynamically
+  chatSocket.onopen = function (e) {
+    console.log("The connection was set up successfully!");
+  };
+  chatSocket.onclose = function (e) {
+    console.log("Error: ", e)
+    console.log("Something unexpected happened!");
+  };
+  document.querySelector("#id_content").focus();
+  document.querySelector("#message-form").addEventListener('submit', function (event) {
+    event.preventDefault();
+    const messageInput = document.querySelector("#id_content").value;
+    chatSocket.send(JSON.stringify({ message: messageInput, receiver: "{{ receiver }}" }));
+    document.querySelector("#id_content").value = '';  // Clear the input field after sending message
+  });
+  chatSocket.onmessage = function (e) {
+    const data = JSON.parse(e.data);
+    var div = document.createElement("div");
+    div.innerHTML = (data.username === "{{ request.user.username }}") ? "You: " + data.message : data.message;
+    document.querySelector("#id_chat_item_container").appendChild(div);
+  };
+</script>
+{% endblock %}

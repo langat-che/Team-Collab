@@ -8,18 +8,25 @@
 <br>
 <br>
 <br>
-<h2>The current Teams</h2>
-<br>
-<br>
-  {% for team in teams %}
-  <section class="cards">
-    <div class="card">
-      <div class="card-body">
-        <h3><a href="{% url 'members' team.id %}">{{ team.name }}</a></h3>
-        <Strong>Description:</Strong> <p>{{team.description | safe}}</p>
+<div class="container mt-4">
+  <h2>The current Teams</h2>
+  <br>
+  <br>
+  <div class="row">
+    {% for team in teams %}
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <h3><a href="{% url 'members' team.id %}">{{ team.name }}</a></h3>
+          <Strong>Description:</Strong> <p>{{team.description | safe}}</p>
+          <!-- Add more team information as needed -->
+  
+          <!-- Example: Link to team details page -->
+         
+        </div>
       </div>
     </div>
-  </section>
-  <br>
-  {% endfor %}
+    {% endfor %}
+  </div>
+</div>
 {% endblock %}
