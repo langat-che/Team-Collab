@@ -6,24 +6,26 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 # Create your models here.
+class ProjectStatus(models.TextChoices):
+    OPEN = 'OPEN', 'Open'
+    IN_PROGRESS = 'IN_PROGRESS', 'In Progress'
+    BLOCKED = 'BLOCKED', 'Blocked'
+    COMPLETED = 'COMPLETED', 'Completed'
+
+
 class Project(models.Model):
     project_name = models.CharField(max_length=255)
-    description = RichTextField(max_length=3000,null=True, blank=True,validators=[MinLengthValidator(100, message="Content must be at least 100 characters.")])
+    description = RichTextField(max_length=3000,null=True, blank=True)
     start_date = models.DateField()
     end_date = models.DateField()
-    status = models.CharField(max_length=20, choices=[
-        ('ready', 'Ready'),
-        ('done', 'Done'),
-        ('on_hold', 'On Hold'),
-        ('blocked', 'Blocked')
-        ],default='ready')
+    status = models.CharField(max_length=20, choices=ProjectStatus.choices, default=ProjectStatus.OPEN)
     project_file = models.FileField(upload_to='media/', null=True, blank=True)
     project_repo = models.URLField(blank=True, null= True)
     progress = models.IntegerField(default=0)
     
     def calculate_progress_percentage(self):
         total_tasks = self.task_set.count()
-        completed_tasks = self.task_set.filter(status='done').count()
+        completed_tasks = self.task_set.filter(status='Completed').count()
         if total_tasks != 0:
             self.progress_percentage = (completed_tasks / total_tasks) * 100
         else:
@@ -32,25 +34,25 @@ class Project(models.Model):
     
     def __str__(self):
         return str(self.project_name)
-   
+
+class TaskStatus(models.TextChoices):
+    OPEN = 'OPEN', 'Open'
+    IN_PROGRESS = 'IN_PROGRESS', 'In Progress'
+    BLOCKED = 'BLOCKED', 'Blocked'
+    COMPLETED = 'COMPLETED', 'Completed'
 
 class Task(models.Model):
     task_name = models.CharField(max_length=255, null=False)
-    description = RichTextField(max_length=3000,null=True, blank=True,validators=[MinLengthValidator(100, message="Content must be at least 100 characters.")])
+    description = RichTextField(max_length=3000,null=True, blank=True)
     start_date = models.DateField( blank=True, null = True)
     due_date = models.DateField( blank=True, null = True)
-    status = models.CharField(max_length=20, choices=[
-        ('not_started', 'Not Started'),
-        ('done', 'Done'),
-        ('on_hold', 'On Hold'),
-        ('blocked', 'Blocked')
-        ], default='not_started')
+    status = models.CharField(max_length=20, choices=TaskStatus.choices, default=TaskStatus.OPEN)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True, blank=True)
     assigned_to = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, default=None)
     progress = models.IntegerField(default=0)
     
     def calculate_progress_percentage(self):
-        if self.status == 'done':
+        if self.status == 'Completed':
             self.progress_percentage = 100
         else:
             self.progress_percentage = 0
@@ -69,15 +71,11 @@ class PerformanceMetric(models.Model):
         validators=[MinValueValidator(1), MaxValueValidator(10)]
     )
     feedback = models.TextField(blank=True, null=True)
-    task_complexity = models.CharField(max_length=50, blank=True)
-    task_duration = models.DurationField(blank=True, null=True)
     task_difficulty_rating = models.PositiveSmallIntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(10)],
         blank=True,
         null=True
     )
-    task_importance = models.CharField(max_length=50, blank=True)
-    task_outcome = models.CharField(max_length=100, blank=True)
     user_engagement = models.CharField(max_length=50, blank=True)
 
 class Comment(models.Model):

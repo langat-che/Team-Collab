@@ -10,6 +10,13 @@
 <br>
 <div class="container">
   <h2>Latest Projects</h2>
+  {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
   {%if user.is_superuser%}
   <div class="d-flex justify-content-center">
     <a href="{% url 'project_add' %}" class="btn btn-primary">Add Project</a>

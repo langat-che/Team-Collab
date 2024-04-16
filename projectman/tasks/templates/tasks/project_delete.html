@@ -5,8 +5,8 @@
 {% endblock %}
   
 {% block content %}
-
-<h1>Delete this project?...</h1>
+<div class="container">
+    <h1>Delete this project?...</h1>
     <br>
     <h3>Delete: {{projetct.project_name}} </h3>
     <br>
@@ -23,6 +23,7 @@
             </div>
         </form>
     </div>
+</div>
     <script>
         // Add JavaScript code to handle the back button click event
         document.getElementById('backButton').addEventListener('click', function() {

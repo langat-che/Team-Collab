@@ -7,7 +7,8 @@ Chat with {{ receiver.username }}
 {% block content %}
 <br>
 <br>
-<center><h1>Hello, Welcome to the chat with {{ receiver.username }}</h1></center>
+<div class="container">
+  <center><h1>Hello, Welcome to the chat with {{ receiver.username }}</h1></center>
 <br>
 {{sender}}
 <div class="chat__item__container" id="id_chat_item_container" style="font-size: 20px">
@@ -28,6 +29,7 @@ Chat with {{ receiver.username }}
   <br>
   <button type="submit" class="btn btn-primary">Send</button>
 </form>
+</div>
 <script>
   const chatSocket = new WebSocket("ws://" + window.location.host + "/ws/chat/{{ user.id }}/");  // Pass the user ID dynamically
   chatSocket.onopen = function (e) {

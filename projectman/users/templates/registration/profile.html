@@ -7,6 +7,7 @@
 <br>
 <br>
 <br>
+<div class="container">
   <center><h2>Welcome {{user.username}} to your profile page!</h2></center>
   <br>
   <br>
@@ -33,12 +34,13 @@
             <a href="{% url 'profile_edit' %}" class="btn btn-outline-info" >Update Profile</a>
           </div>
       </div>
-      <script>
-        // Add JavaScript code to handle the back button click event
-        document.getElementById('backButton').addEventListener('click', function() {
-          // Use the history object to navigate back
-          window.history.back();
-        });
-        
-        </script>
+</div>
+<script>
+  // Add JavaScript code to handle the back button click event
+  document.getElementById('backButton').addEventListener('click', function() {
+    // Use the history object to navigate back
+    window.history.back();
+  });
+  
+  </script>
 {% endblock %}

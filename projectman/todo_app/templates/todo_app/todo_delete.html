@@ -7,18 +7,20 @@ to-do delete
 {% block content %}
 <br>
 <br>
-<h2>Are you sure you would like to delete your todo task?</h2>
-<p>
-  <strong> {{todo.title}}</strong><br>
-  {{todo.description}}
-</p>
-<form action="" method="POST">
-  {%csrf_token%}
-  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-    <button class="btn btn-danger" type="submit" >Delete</button>
-    <button class="btn btn-secondary" id="backButton">Back</button>
+<div class="container">
+  <h2>Are you sure you would like to delete your todo task?</h2>
+  <p>
+    <strong> {{todo.title}}</strong><br>
+    {{todo.description}}
+  </p>
+  <form action="" method="POST">
+    {%csrf_token%}
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+      <button class="btn btn-danger" type="submit" >Delete</button>
+      <button class="btn btn-secondary" id="backButton">Back</button>
+  </div>
+  </form>
 </div>
-</form>
 <script>
   // Add JavaScript code to handle the back button click event
   document.getElementById('backButton').addEventListener('click', function() {

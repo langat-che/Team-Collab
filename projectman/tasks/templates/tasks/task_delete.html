@@ -5,7 +5,8 @@
 {% endblock %}
   
 {% block content %}
-<h1>Delete this presentation?...</h1>
+<div class="container">
+    <h1>Delete this presentation?...</h1>
     <br>
     <h3>Delete: {{task.task_name}} </h3>
     <br>
@@ -22,11 +23,12 @@
             </div>
         </form>
     </div>
-    <script>
-        // Add JavaScript code to handle the back button click event
-        document.getElementById('backButton').addEventListener('click', function() {
-          // Use the history object to navigate back
-          window.history.back();
-        });
-        </script>
+</div>
+<script>
+// Add JavaScript code to handle the back button click event
+document.getElementById('backButton').addEventListener('click', function() {
+    // Use the history object to navigate back
+    window.history.back();
+});
+</script>
 {% endblock %}

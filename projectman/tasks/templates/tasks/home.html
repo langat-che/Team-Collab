@@ -16,33 +16,52 @@
   }
 </style>
 <br>
+<br>
 <div class="container">
-    <section class="current_users justify-content-start" >
-        {%if user.is_authenticated%}
-        <h2>Online Users:</h2>
-        <ul>
-            {% for user_session in active_users %}
-                <li>{{ user_session.user.username }} - {{ user_session.last_activity }}</li>
-            {% endfor %}
-        </ul>
-        {%endif%}
-    </section>
-  <section class="section">
-      <center><h1>Welcome to Brussley Tech !!</h1></center>
-  <br>
-  <h3>Latest News for the Crew!!</h3>
-  <div class="form-group p-5 my-5 border">
-      <ul>
-          {%for news in announcement%}
-              <li>
-                  <h4>{{news.title}} </h4><small>{{news.date_added}} </small>
-                  <p>{{news.content}} </p>
-              </li>
-              <hr>
-          {%endfor%}
-      </ul>
-  </div>
-  </section>
+    <div class="row">
+        <div class="col-md-8">
+            <section class="current_users justify-content-start" >
+                {%if user.is_authenticated%}
+                <h2>Online Users:</h2>
+                <ul>
+                    {% for user_session in active_users %}
+                        <li>{{ user_session.username }}</li>
+                        <!-- <li>{{ user_session.username }} - {{ user_session.last_activity }}</li> -->
+                    {% endfor %}
+                </ul>
+                {%endif%}
+            </section>
+            <!-- Main content area -->
+            <center><h1>Welcome to Brussley Tech !!</h1></center>
+            <br>
+            <h3>Latest News for the Crew!!</h3>
+            <div class="form-group p-5 my-5 border">
+                <ul>
+                    {%for news in announcement%}
+                        <li>
+                            <h4>{{news.title}} </h4><small>{{news.date_added}} </small>
+                            <p>{{news.content}} </p>
+                        </li>
+                        <hr>
+                    {%endfor%}
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                {% if user.is_authenticated%}
+                <h2>Ongoing Tasks for {{ request.user.username }}</h2>
+                <ul>
+                {% for task in ongoing_tasks %}
+                    <li><a href="{% url 'task_detail' task.id %}"><strong>{{ task.task_name }}</strong></a> - Due: {{task.due_date}}
+                    {{ task.description |safe }}</li>
+                {% endfor %}
+                </ul> 
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </div>
 <!-- Add this script after including Bootstrap CSS -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

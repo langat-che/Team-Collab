@@ -18,6 +18,7 @@
 </style>
 <br>
 <br>
+<div class="container">
     <center><h1>
         <svg xmlns="http://www.w3.org/2000/svg" width="250" height="250" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
             <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
@@ -54,16 +55,16 @@
                 </div>    
         </div>
     </div>
-    <script type="text/javascript">
-        function togglePassword() {
-            var passwordField = document.getElementById('id_password');
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-            } else {
-                passwordField.type = 'password';
-            }
-        }
-        </script> 
-
+</div>
+<script type="text/javascript">
+function togglePassword() {
+    var passwordField = document.getElementById('id_password');
+    if (passwordField.type === 'password') {
+        passwordField.type = 'text';
+    } else {
+        passwordField.type = 'password';
+    }
+}
+</script> 
 {% endblock content %}
 

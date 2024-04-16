@@ -7,15 +7,17 @@ Members
 {% block content %}
 <br>
 <br>
-<h2>Users in {{ team.name }}</h2>
-<ul>
-  {% for user in team_users %}
-    <li>{{ user.user.username }}</li>
-  {% endfor %}
-</ul>
-<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-  <br>
-  <p><button class="btn btn-secondary" id="backButton">Back</button></p>
+<div class="container">
+  <h2>Users in {{ team.name }}</h2>
+  <ul>
+    {% for user in team_users %}
+      <li><a href="{% url 'member_detail' team_id=team.id user_id=user.id %}">{{ user.user.username }}</a></li>
+    {% endfor %}
+  </ul>
+  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    <br>
+    <p><button class="btn btn-secondary" id="backButton">Back</button></p>
+  </div>
 </div>
 <script>
   document.getElementById('backButton').addEventListener('click', function() {

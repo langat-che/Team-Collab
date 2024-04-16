@@ -1,8 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from .mixins import WeekMixin
-from .forms import CommentForm, ProjectForm , TaskForm, PerformanceMetricForm
-from .models import Announcement,Project, Task, User, Comment, PerformanceMetric
+from .forms import CommentForm, ProjectForm , TaskForm, PerformanceMetricForm, TaskProgressUpdateForm
+from .models import Announcement,Project, Task, User, Comment, PerformanceMetric,TaskStatus
 from django.views.generic import UpdateView, DeleteView, View
 from django.shortcuts import render,redirect,get_object_or_404, HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
@@ -12,6 +12,7 @@ import mimetypes
 from django.utils import timezone
 from users.models import UserSession
 
+from django.contrib.sessions.models import Session
 
 # Create your views here.
 
@@ -25,12 +26,31 @@ def base_temp(request):
     }
     return render(request, 'tasks/base.html', context)
 
+
+def user_performance_view(request,team_id, user_id):
+    user = User.objects.get(pk=user_id)
+    performance_metrics = PerformanceMetric.objects.filter(user_id=user_id)        
+    context = {
+        'user': user,
+        'performance_metrics': performance_metrics
+    }
+    return render(request, 'tasks/user_detail.html', context)
+
+
+@login_required(login_url="login")
 def home(request):
+    user = request.user
+    ongoing_tasks = Task.objects.filter(assigned_to=user,status__in=[TaskStatus.OPEN, TaskStatus.IN_PROGRESS])
     announcement = Announcement.objects.all()[:5]
-    active_users = UserSession.objects.filter(
-        last_activity__gte=timezone.now() - timezone.timedelta(minutes=15)
-    )
-    context = {'active_users':active_users,'announcement':announcement}
+    active_sessions = Session.objects.filter(expire_date__gte=timezone.now())
+    user_ids = []
+    for session in active_sessions:
+        data = session.get_decoded()
+        user_id = data.get('_auth_user_id', None)
+        if user_id:
+            user_ids.append(user_id)
+    active_users_ = User.objects.filter(id__in=user_ids)
+    context = {'active_users':active_users_,'announcement':announcement, 'ongoing_tasks':ongoing_tasks}
     return render(request, 'tasks/home.html',context)
 
 def AboutView(request):
@@ -122,6 +142,21 @@ def project_list(request):
     projects = Project.objects.all().order_by('-end_date')
     return render(request, 'tasks/project_list.html', {'projects': projects})
 
+@login_required
+def user_task_list(request):
+    tasks = Task.objects.filter(assigned_to=request.user)
+    context = {
+        'tasks': tasks,
+    }
+    return render(request, 'tasks/user_task_list.html', context)
+
+def completed_projects_view(request):
+    completed_projects = Project.objects.filter(status='COMPLETED')
+    context = {
+        'completed_projects': completed_projects
+    }
+    return render(request, 'tasks/completed_projects.html', context)
+
 
 # UpdateViews
 ##
@@ -136,17 +171,31 @@ class ProjectUpdate(UpdateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
-    
-
-
-    
+        
 class TaskUpdate(UpdateView):
     model = Task
     form_class = TaskForm
-    template_name = 'tasks/task_view.html'
+    template_name = 'tasks/task_update.html'
     context_object_name = 'task'
     
+    def get_success_url(self):
+        return reverse_lazy('task_detail', kwargs={'task_id': self.object.pk})
     
+@login_required
+def update_progress_task(request, task_id):
+    task = get_object_or_404(Task, id=task_id, assigned_to=request.user)
+
+    if request.method == 'POST':
+        form = TaskProgressUpdateForm(request.POST, instance=task)
+        if form.is_valid():
+            updated_task = form.save()
+            updated_task.calculate_progress_percentage()
+            return redirect('task_detail', task_id=task.id)
+    else:
+        form = TaskProgressUpdateForm(instance=task)
+
+    return render(request, 'tasks/task_progress_update.html', {'form': form, 'task': task})
+
 
 #DeleteViews
 ##
@@ -161,19 +210,16 @@ class ProfileDelete(DeleteView):
     model = User
     template_name = 'tasks/profile.html'
     success_url = reverse_lazy('profile')
+    
+class TaskDelete(View):
+    def get(self, request, task_id):
+        task = get_object_or_404(Task, pk=task_id)
+        return render(request, 'tasks/task_delete.html', {'task': task})
 
-    
-class TaskDelete(DeleteView):
-    model = Task
-    template_name = 'tasks/task_delete.html'
-    success_url = reverse_lazy('project_detail')
-    
-    
-##Assigned tasks for a user
-def assigned_tasks(request):
-    user = request.user
-    user_tasks = Task.objects.filter(assigned_to=user)
-    return render(request, 'tasks/assigned_tasks.html', {'user_tasks': user_tasks})
+    def post(self, request, task_id):
+        task = get_object_or_404(Task, pk=task_id)
+        task.delete()
+        return redirect('project_list')
 
     
 def open_project_document(request, project_id):
@@ -207,7 +253,7 @@ def performance_metric_form(request):
         if form.is_valid():
             form.save()
             # Redirect to a success page or another view
-            return redirect('success_page')
+            return redirect('home')
     else:
         form = PerformanceMetricForm()
     return render(request, 'tasks/performance_metric.html', {'form': form})    

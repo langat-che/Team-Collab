@@ -7,10 +7,10 @@
 {% block content %}
 
 <br>
-{{progress_percentage}}
 <br>
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 <br>
+<div class="container">
     <h2>{{ project.project_name }}</h2>
     {% if user.is_authenticated %}
         {% if user.is_superuser %}
@@ -51,16 +51,18 @@
     <h3>Tasks</h3>
     <ul>
     {% for task in tasks %}
-        <li><h4><a href="{% url 'task_detail' task.id %}">{{ task.task_name }}</a></h4></li>
-        <li>Assigned to:{{task.assigned_to}} </li>
-        <li>Due date:{{task.due_date}} </li>
+        <li>
+            <h4><a href="{% url 'task_detail' task.id %}">{{ task.task_name }}</a></h4>
+           Assigned to:{{task.assigned_to}} 
+           <br> Due date:{{task.due_date}} 
+        </li>
         <hr>
     {% endfor %}
     </ul>
     <div class="d-flex justify-content-center">
         <a href="{% url 'project_list' %}" class="btn btn-secondary">Back</a>
     </div>
-   
+</div>  
     <script>
         // Get the progress bar element
         const progressBar = document.querySelector('.progress-bar');

@@ -4,14 +4,16 @@
 to-do detail
 {% endblock %}
 {% block content %}
-<h1>Task: {{todo.title}} </h1>
-<a href="{% url 'todoedit' todo.pk%}">Edit</a>
-<a href="{% url 'tododelete' todo.pk %}">Delete</a>
-<br>
-<br>
-<p><strong>Description:</strong> {{todo.description}}  </p>
-<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-    <button class="btn btn-secondary" id="backButton">Back</button>
+<div class="container">
+  <h1>Task: {{todo.title}} </h1>
+  <a href="{% url 'todoedit' todo.pk%}">Edit</a>
+  <a href="{% url 'tododelete' todo.pk %}">Delete</a>
+  <br>
+  <br>
+  <p><strong>Description:</strong> {{todo.description}}  </p>
+  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+      <button class="btn btn-secondary" id="backButton">Back</button>
+  </div>
 </div>
 <script>
     // Add JavaScript code to handle the back button click event

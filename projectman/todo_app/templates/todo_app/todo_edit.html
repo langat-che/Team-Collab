@@ -7,15 +7,17 @@ to-do edit
 {% block content %}
 <br>
   <br>
-  <h2>Edit your to-do task here!</h2>
-  <form action="" method="POST">
-    {%csrf_token%}
-        {{form.as_p}}
-        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-          <button class="btn btn-success" type="submit" >Update</button>
-          <button class="btn btn-secondary" id="backButton">Back</button>
-      </div>
-      </form>
+  <div class="container">
+    <h2>Edit your to-do task here!</h2>
+    <form action="" method="POST">
+      {%csrf_token%}
+          {{form.as_p}}
+          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button class="btn btn-success" type="submit" >Update</button>
+            <button class="btn btn-secondary" id="backButton">Back</button>
+        </div>
+        </form>
+  </div>
 <script>
   // Add JavaScript code to handle the back button click event
   document.getElementById('backButton').addEventListener('click', function() {

@@ -8,11 +8,11 @@ to-do list
 <br>
 <br>
 <br>
-<div class="container mt-4">
+<div class="container">
+  <div class="container mt-4">
     <h2>To-Do List</h2>
     <br>
     <a href="{% url 'todoadd' %}" class="btn btn-success">Add a todo task</a>
-    <br>
     <br>
     <br>
     <ul class="list-group">
@@ -26,17 +26,16 @@ to-do list
               {% endif %}
               <small>{{ todo.created|date:"F j, Y, g:i a" }}</small>
             </div>
-            <div>
-              <!-- <input type="checkbox" {% if todo.complete %}checked{% endif %} disabled> -->
-            </div>
+            <br>
           </div>
         </li>
-        <br>
-        <br>
         <br>
         {% empty %}
         <h3>No Items in list!</h3>
       {% endfor %}
+      <br>
     </ul>
+    <br>
   </div>
+</div>
 {% endblock %}

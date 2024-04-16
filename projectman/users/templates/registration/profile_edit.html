@@ -5,23 +5,24 @@
 {% endblock %}
   
 {% block content %}
-
-    {% if user.is_authenticated %} 
-    <h2>Update Profile</h2>
-    <form method="post" enctype="multipart/form-data" class="form">
-      {% csrf_token %}    
-      {{ user_form.as_p }}
-      {{ profile_form.as_p }}
+<div class="container">
+  {% if user.is_authenticated %} 
+  <h2>Update Profile</h2>
+  <form method="post" enctype="multipart/form-data" class="form">
+    {% csrf_token %}    
+    {{ user_form.as_p }}
+    {{ profile_form.as_p }}
+    <br>
+    <button type="submit" class="btn btn-success">Update Profile</button>
+  </form>
+  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
       <br>
-      <button type="submit" class="btn btn-success">Update Profile</button>
-    </form>
-    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <br>
-        <p><button class="btn btn-secondary" id="backButton">Back</button></p>
-      </div>
-    {% else %}
-        <p>You are not authorized to be in this page!!</p>
-    {% endif %}
+      <p><button class="btn btn-secondary" id="backButton">Back</button></p>
+    </div>
+  {% else %}
+      <p>You are not authorized to be in this page!!</p>
+  {% endif %}
+</div>
     <script>
         document.getElementById('backButton').addEventListener('click', function() {
           // Use the history object to navigate back

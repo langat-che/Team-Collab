@@ -1,0 +1,29 @@
+{% extends 'tasks/base.html' %}  
+{% block title %}
+Task progress Update
+{% endblock %}
+  
+{% block content %}
+<div class="container">
+    <h1>Update Task</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="text" id="progress_value" value="{{ form.initial.progress }}" readonly>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <button class="btn btn-primary" type="submit" >Update progress</button>
+        <button class="btn btn-secondary" id="backButton">Back</button>
+    </div>
+  </form>
+</div>  
+<script>
+    // Add JavaScript code to handle the back button click event
+    document.getElementById('backButton').addEventListener('click', function() {
+      // Use the history object to navigate back
+      window.history.back();
+    });
+      function updateTextInput(val) {
+          document.getElementById('progress_value').value = val;
+      }
+    </script>
+{% endblock %}

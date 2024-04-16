@@ -4,10 +4,39 @@
 Performance Metric Form
 {% endblock %}  
 {% block content %}
-<h1>Performance Metric Form</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Submit</button>
-</form>
+<style>
+    .form-container{
+        background-color: rgb(226, 248, 255);
+    }
+    .container-c1{
+        border-radius: 2rem;
+        background-color: #8EC5FC;
+        background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);
+    }
+</style>
+<div class="container">
+    <div class="container-c1 p-5 my-5 border">
+        <h1>Performance Metric Form</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <br>
+                <p><button class="btn btn-success" type="submit" value="submit">Submit</button></p>
+                <p><button class="btn btn-secondary" id="backButton">Back</button></p>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    // Add JavaScript code to handle the back button click event
+    document.getElementById('backButton').addEventListener('click', function() {
+        // Use the history object to navigate back
+        window.history.back();
+    });
+    function confirmSubmit() {
+        return confirm("Are you sure you want to submit the form?");
+    }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 {% endblock %}

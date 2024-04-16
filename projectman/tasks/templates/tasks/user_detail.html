@@ -1,0 +1,32 @@
+{% extends 'tasks/base.html' %}
+{% load static %}  
+{% block title %}
+Member performance
+{% endblock %}
+  
+{% block content %}
+<div class="container">
+    <div class="user-card">
+        <p>Email: {{ user.email }}</p>
+        <h3>{{user.first_name}}'s Performance </h3>
+        <ul>
+
+{% if performance_metrics %}
+{% for performance_metric in performance_metrics %}
+<li>
+    Task: {{ performance_metric.task.task_name }}<br>
+    Timeliness: {{ performance_metric.timeliness }}<br>
+    Quality of Work: {{ performance_metric.quality_of_work }}<br>
+    Task Difficulty Rating: {{ performance_metric.task_difficulty_rating }}<br>
+    Feedback: {{ performance_metric.feedback }}
+</li>
+{% endfor %}
+{% else %}
+  <p>No performance data available.</p>
+{% endif %}
+        </ul>
+    </div>
+</div>
+</div>
+
+{% endblock %}

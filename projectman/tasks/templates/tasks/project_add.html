@@ -14,38 +14,38 @@
         background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);
     }
 </style>
-    
+<div class="container">
     {% if user.is_authenticated %}
-       <center><h1>Welcome {{user.first_name}}!! </h1></center> 
-    {% endif %}
-    <div class="container-c1 p-5 my-5 border">
-        <center><h3>Add a Project here</h3></center> 
-            {% for msg in messages %}
-                {{msg}}
-            {% endfor %}
-        <form action=""method="post" id="postForm" action="{% url 'project_add' %}" onsubmit="return confirmSubmit()">
-            {%csrf_token%}
-                {{form.media}}
-                {{form.as_p}}
-            <center><strong>Note that there will be no editing after pressing the SAVE button!!</strong></center>
-            <br>
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <br>
-                <p><button class="btn btn-success" type="submit" value="submit">Save</button></p>
-                <p><button class="btn btn-secondary" id="backButton">Back</button></p>
-            </div>
-        </form>
-    </div>
-
-  <script>
-    // Add JavaScript code to handle the back button click event
-    document.getElementById('backButton').addEventListener('click', function() {
-      // Use the history object to navigate back
-      window.history.back();
-    });
-    function confirmSubmit() {
-        return confirm("Are you sure you want to submit the form?");
-    }
-    </script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <center><h1>Welcome {{user.first_name}}!! </h1></center> 
+ {% endif %}
+ <div class="container-c1 p-5 my-5 border">
+     <center><h3>Add a Project here</h3></center> 
+         {% for msg in messages %}
+             {{msg}}
+         {% endfor %}
+     <form action=""method="post" id="postForm" action="{% url 'project_add' %}" onsubmit="return confirmSubmit()">
+         {%csrf_token%}
+             {{form.media}}
+             {{form.as_p}}
+         <center><strong>Note that there will be no editing after pressing the SAVE button!!</strong></center>
+         <br>
+         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+             <br>
+             <p><button class="btn btn-success" type="submit" value="submit">Save</button></p>
+             <p><button class="btn btn-secondary" id="backButton">Back</button></p>
+         </div>
+     </form>
+ </div>
+</div>
+<script>
+// Add JavaScript code to handle the back button click event
+document.getElementById('backButton').addEventListener('click', function() {
+    // Use the history object to navigate back
+    window.history.back();
+});
+function confirmSubmit() {
+    return confirm("Are you sure you want to submit the form?");
+}
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 {% endblock content %}
